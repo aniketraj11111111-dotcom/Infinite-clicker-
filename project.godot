@@ -18,3 +18,4 @@ config/icon="res://icon.svg"
 
 GameState="*res://src/core/GameState.gd"
 SaveLoadSystem="*res://src/core/SaveLoadSystem.gd"
+AudioManager="*res://src/core/AudioManager.gd"

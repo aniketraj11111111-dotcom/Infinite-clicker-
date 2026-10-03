@@ -12,6 +12,8 @@ var upgrades: Dictionary = {}
 var auto_save_timer: float = 0.0
 const AUTO_SAVE_INTERVAL: float = 10.0
 
+var offline_bonus: BigNumber = null
+
 func _ready() -> void:
 	if not SaveLoadSystem.load_game():
 		# Initialize fresh game profile
