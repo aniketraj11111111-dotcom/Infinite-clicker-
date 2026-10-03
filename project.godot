@@ -16,4 +16,5 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameState="*res://scripts/autoload/GameState.gd"
+GameState="*res://src/core/GameState.gd"
+SaveLoadSystem="*res://src/core/SaveLoadSystem.gd"
