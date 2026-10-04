@@ -24,7 +24,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if passive_income.mantissa > 0:
-		var income_this_frame = BigNumber.mul(passive_income, BigNumber.from_float(delta))
+		var income_this_frame: BigNumber = BigNumber.mul(passive_income, BigNumber.from_float(delta))
 		add_currency(income_this_frame)
 
 	auto_save_timer += delta

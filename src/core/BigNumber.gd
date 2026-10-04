@@ -22,8 +22,8 @@ func _normalize() -> void:
 		exponent += int(shift)
 
 static func from_string(val: String) -> BigNumber:
-	var result = BigNumber.new()
-	var parts = val.split("e")
+	var result: BigNumber = BigNumber.new()
+	var parts: PackedStringArray = val.split("e")
 	if parts.size() == 2:
 		result.mantissa = parts[0].to_float()
 		result.exponent = parts[1].to_int()
@@ -40,9 +40,9 @@ static func add(a: BigNumber, b: BigNumber) -> BigNumber:
 	if a.mantissa == 0: return BigNumber.new(b.mantissa, b.exponent)
 	if b.mantissa == 0: return BigNumber.new(a.mantissa, a.exponent)
 
-	var max_exp = max(a.exponent, b.exponent)
-	var a_scaled = a.mantissa * pow(10.0, a.exponent - max_exp)
-	var b_scaled = b.mantissa * pow(10.0, b.exponent - max_exp)
+	var max_exp: int = max(a.exponent, b.exponent)
+	var a_scaled: float = a.mantissa * pow(10.0, a.exponent - max_exp)
+	var b_scaled: float = b.mantissa * pow(10.0, b.exponent - max_exp)
 
 	return BigNumber.new(a_scaled + b_scaled, max_exp)
 
@@ -50,9 +50,9 @@ static func sub(a: BigNumber, b: BigNumber) -> BigNumber:
 	if b.mantissa == 0: return BigNumber.new(a.mantissa, a.exponent)
 	if a.mantissa == 0: return BigNumber.new(-b.mantissa, b.exponent)
 
-	var max_exp = max(a.exponent, b.exponent)
-	var a_scaled = a.mantissa * pow(10.0, a.exponent - max_exp)
-	var b_scaled = b.mantissa * pow(10.0, b.exponent - max_exp)
+	var max_exp: int = max(a.exponent, b.exponent)
+	var a_scaled: float = a.mantissa * pow(10.0, a.exponent - max_exp)
+	var b_scaled: float = b.mantissa * pow(10.0, b.exponent - max_exp)
 
 	return BigNumber.new(a_scaled - b_scaled, max_exp)
 
@@ -76,11 +76,11 @@ func to_string() -> String:
 	if exponent < 6:
 		return str(floor(mantissa * pow(10.0, exponent)))
 
-	var suffixes = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"]
-	var suffix_idx = int(floor(exponent / 3))
+	var suffixes: Array = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"]
+	var suffix_idx: int = int(floor(exponent / 3))
 
 	if suffix_idx < suffixes.size():
-		var display_mantissa = mantissa * pow(10.0, exponent % 3)
+		var display_mantissa: float = mantissa * pow(10.0, exponent % 3)
 		return "%.2f%s" % [display_mantissa, suffixes[suffix_idx]]
 	else:
 		return "%.2fe%d" % [mantissa, exponent]

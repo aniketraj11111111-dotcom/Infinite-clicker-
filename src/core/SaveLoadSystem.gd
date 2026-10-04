@@ -4,7 +4,7 @@ const SAVE_PATH: String = "user://infinite_save.dat"
 const SECURE_KEY: String = "Sup3rS3cr3tS4v3K3y!123"
 
 func save_game() -> void:
-	var save_data = {
+	var save_data: Dictionary = {
 		"currency_m": GameState.currency.mantissa,
 		"currency_e": GameState.currency.exponent,
 		"click_power_m": GameState.click_power.mantissa,
@@ -62,8 +62,8 @@ func load_game() -> bool:
 		var time_passed: float = current_time - last_login
 
 		if time_passed > 60.0 and GameState.passive_income.mantissa > 0:
-			var multiplier = BigNumber.from_float(time_passed * 0.5)
-			var offline_earnings = BigNumber.mul(GameState.passive_income, multiplier)
+			var multiplier: BigNumber = BigNumber.from_float(time_passed * 0.5)
+			var offline_earnings: BigNumber = BigNumber.mul(GameState.passive_income, multiplier)
 			GameState.add_currency(offline_earnings)
 			GameState.offline_bonus = offline_earnings
 
