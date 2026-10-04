@@ -2,7 +2,7 @@ extends Node
 
 class_name ShopSystem
 
-const UPGRADES_DB = {
+const UPGRADES_DB: Dictionary = {
 	"click_power_1": {
 		"name": "Better Mouse",
 		"base_cost": "10",
@@ -25,23 +25,23 @@ func get_upgrade_cost(upgrade_id: String, level: int) -> BigNumber:
 	if not UPGRADES_DB.has(upgrade_id):
 		return BigNumber.from_float(0.0)
 
-	var data = UPGRADES_DB[upgrade_id]
-	var base_cost = BigNumber.from_string(data["base_cost"])
-	var growth = pow(data["cost_growth"], level)
+	var data: Dictionary = UPGRADES_DB[upgrade_id]
+	var base_cost: BigNumber = BigNumber.from_string(data["base_cost"])
+	var growth: float = pow(data["cost_growth"], level)
 
 	return BigNumber.mul(base_cost, BigNumber.from_float(growth))
 
 func can_afford(upgrade_id: String) -> bool:
-	var level = GameState.get_upgrade_level(upgrade_id)
-	var cost = get_upgrade_cost(upgrade_id, level)
+	var level: int = GameState.get_upgrade_level(upgrade_id)
+	var cost: BigNumber = get_upgrade_cost(upgrade_id, level)
 	return BigNumber.is_greater_than_or_equal(GameState.currency, cost)
 
 func buy_upgrade(upgrade_id: String) -> bool:
 	if not UPGRADES_DB.has(upgrade_id):
 		return false
 
-	var level = GameState.get_upgrade_level(upgrade_id)
-	var cost = get_upgrade_cost(upgrade_id, level)
+	var level: int = GameState.get_upgrade_level(upgrade_id)
+	var cost: BigNumber = get_upgrade_cost(upgrade_id, level)
 
 	if GameState.spend_currency(cost):
 		GameState.set_upgrade_level(upgrade_id, level + 1)
@@ -51,8 +51,8 @@ func buy_upgrade(upgrade_id: String) -> bool:
 	return false
 
 func apply_upgrade_effect(upgrade_id: String) -> void:
-	var data = UPGRADES_DB[upgrade_id]
-	var effect_amount = BigNumber.from_string(data["base_effect"])
+	var data: Dictionary = UPGRADES_DB[upgrade_id]
+	var effect_amount: BigNumber = BigNumber.from_string(data["base_effect"])
 
 	if data["effect_type"] == "click_power":
 		GameState.click_power = BigNumber.add(GameState.click_power, effect_amount)
@@ -64,6 +64,6 @@ func recalculate_all_effects() -> void:
 	GameState.passive_income = BigNumber.from_float(0.0)
 
 	for upgrade_id in UPGRADES_DB:
-		var level = GameState.get_upgrade_level(upgrade_id)
+		var level: int = GameState.get_upgrade_level(upgrade_id)
 		for i in range(level):
 			apply_upgrade_effect(upgrade_id)

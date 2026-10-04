@@ -16,8 +16,8 @@ func _normalize() -> void:
 	if is_nan(mantissa) or is_inf(mantissa):
 		return
 
-	var shift = floor(log10(abs(mantissa)))
-	if shift != 0:
+	var shift: float = floor(log(abs(mantissa)) / log(10.0))
+	if shift != 0.0:
 		mantissa /= pow(10.0, shift)
 		exponent += int(shift)
 

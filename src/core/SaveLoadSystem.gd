@@ -1,7 +1,7 @@
 extends Node
 
-const SAVE_PATH = "user://infinite_save.dat"
-const SECURE_KEY = "Sup3rS3cr3tS4v3K3y!123"
+const SAVE_PATH: String = "user://infinite_save.dat"
+const SECURE_KEY: String = "Sup3rS3cr3tS4v3K3y!123"
 
 func save_game() -> void:
 	var save_data = {
@@ -15,8 +15,8 @@ func save_game() -> void:
 		"last_login_timestamp": Time.get_unix_time_from_system()
 	}
 
-	var json_string = JSON.stringify(save_data)
-	var file = FileAccess.open_encrypted_with_pass(SAVE_PATH, FileAccess.WRITE, SECURE_KEY)
+	var json_string: String = JSON.stringify(save_data)
+	var file: FileAccess = FileAccess.open_encrypted_with_pass(SAVE_PATH, FileAccess.WRITE, SECURE_KEY)
 	if file:
 		file.store_string(json_string)
 		file.close()
@@ -27,22 +27,22 @@ func load_game() -> bool:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return false
 
-	var file = FileAccess.open_encrypted_with_pass(SAVE_PATH, FileAccess.READ, SECURE_KEY)
+	var file: FileAccess = FileAccess.open_encrypted_with_pass(SAVE_PATH, FileAccess.READ, SECURE_KEY)
 	if not file:
 		push_error("Failed to open save file for reading.")
 		return false
 
-	var json_string = file.get_as_text()
+	var json_string: String = file.get_as_text()
 	file.close()
 
-	var json = JSON.new()
-	var parse_result = json.parse(json_string)
+	var json: JSON = JSON.new()
+	var parse_result: Error = json.parse(json_string)
 
 	if parse_result != OK:
 		push_error("JSON Parse Error: ", json.get_error_message())
 		return false
 
-	var save_data = json.data
+	var save_data: Variant = json.data
 	if typeof(save_data) != TYPE_DICTIONARY:
 		push_error("Parsed JSON is not a dictionary.")
 		return false

@@ -1,14 +1,12 @@
 extends Node
 
-var click_player: AudioStreamPlayer
-var upgrade_player: AudioStreamPlayer
+var click_player: AudioStreamPlayer = AudioStreamPlayer.new()
+var upgrade_player: AudioStreamPlayer = AudioStreamPlayer.new()
 
 func _ready() -> void:
-	click_player = AudioStreamPlayer.new()
 	# Optional placeholder sound, user will drag and drop later.
 	add_child(click_player)
 
-	upgrade_player = AudioStreamPlayer.new()
 	# Optional placeholder sound.
 	add_child(upgrade_player)
 
