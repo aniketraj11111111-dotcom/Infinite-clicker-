@@ -9,13 +9,32 @@ var passive_income: BigNumber = BigNumber.from_float(0.0)
 
 var upgrades: Dictionary = {}
 
+var auto_save_timer: float = 0.0
+const AUTO_SAVE_INTERVAL: float = 10.0
+
+var offline_bonus: BigNumber = null
+
 func _ready() -> void:
-	pass
+	if not SaveLoadSystem.load_game():
+		# Initialize fresh game profile
+		currency = BigNumber.from_float(0.0)
+		click_power = BigNumber.from_float(1.0)
+		passive_income = BigNumber.from_float(0.0)
+		upgrades = {}
 
 func _process(delta: float) -> void:
 	if passive_income.mantissa > 0:
-		var income_this_frame = BigNumber.mul(passive_income, BigNumber.from_float(delta))
+		var income_this_frame: BigNumber = BigNumber.mul(passive_income, BigNumber.from_float(delta))
 		add_currency(income_this_frame)
+
+	auto_save_timer += delta
+	if auto_save_timer >= AUTO_SAVE_INTERVAL:
+		auto_save_timer = 0.0
+		SaveLoadSystem.save_game()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		SaveLoadSystem.save_game()
 
 func add_currency(amount: BigNumber) -> void:
 	currency = BigNumber.add(currency, amount)
